@@ -1,0 +1,10 @@
+<div>
+  <div class="line" *ngFor="let line of lines; let i = index">
+    <div class="column" *ngFor="let colum of columns; let j = index">
+      <app-pixel [on]="onOffController[i][j]"></app-pixel>
+    </div>
+  </div>
+</div>
+<div><button (click)="pause()">{{isPaused ? "Start" : "Pause"}}</button></div>
+<div><button (click)="changeDown()">Move Down</button></div>
+<div><button (click)="changeForward()">Move Forward</button></div>

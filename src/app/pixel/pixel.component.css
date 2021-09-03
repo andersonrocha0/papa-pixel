@@ -1,0 +1,16 @@
+.pixel {
+  width: 20px;
+  height: 20px;
+  margin-left: 2px;
+  margin-top: 2px;
+  border: solid 1px;
+  border-color: rgba(214, 214, 221, 0.25)
+}
+
+.on {
+  background-color: black;
+}
+
+.off {
+  background-color: white;
+}

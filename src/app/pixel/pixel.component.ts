@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-pixel',
@@ -9,6 +9,7 @@ export class PixelComponent implements OnInit {
   @Input() on = false;
 
   constructor() { }
+
 
   ngOnInit(): void {
   }

@@ -19,20 +19,28 @@ export class SceneComponent implements OnInit {
     { i: 0, j: 2 },
     { i: 0, j: 3 },
   ];
+  originalSnakePosition = [...this.snakePosition];
 
   snakeFood: Array<{i: number, j: number}> = [];
 
+  moveDirectionOld = Direction.Forward;
   moveDirection = Direction.Forward;
   speed = SceneSettings.initialSpeed;
 
-  constructor() {
+
+
+  start() {
+    this.snakePosition = this.originalSnakePosition;
+    this.moveDirection = Direction.Forward;
     this.resetOnOffController();
     this.paintSnakeFromPosition();
     this.addNewFood();
     this.paintSnakeFood();
+    this.unpause();
   }
 
   ngOnInit(): void {
+    this.start();
     this.move();
   }
 
@@ -72,7 +80,11 @@ export class SceneComponent implements OnInit {
   }
 
   pause() {
-    this.isPaused = !this.isPaused;
+    this.isPaused = true;
+  }
+
+  unpause() {
+    this.isPaused = false;
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -90,7 +102,12 @@ export class SceneComponent implements OnInit {
     } else if (event.key === 'ArrowUp') {
       this.changeDirection(Direction.Up);
     } else if (event.key === ' ') {
-      this.pause();
+      if (this.isPaused) {
+        this.unpause();
+      } else {
+        this.pause();
+      }
+
     }
   }
 
@@ -111,6 +128,7 @@ export class SceneComponent implements OnInit {
   }
 
   changeDirection(direction: Direction) {
+    this.moveDirectionOld = this.moveDirection;
     this.moveDirection = direction;
   }
 
@@ -126,12 +144,44 @@ export class SceneComponent implements OnInit {
         } else if (this.moveDirection === Direction.Up) {
           this.moveUp();
         }
+        const snakePositionMap = new Map();
+        this.snakePosition.forEach((item) => {
+          const key = item.i + "" + item.j;
+          const collection = snakePositionMap.get(key);
+          if (!collection) {
+            snakePositionMap.set(key, [item]);
+          } else {
+            collection.push(item);
+          }
+        });
+        for (const value of snakePositionMap.values()) {
+          if (value.length > 1) {
+            this.pause();
+            alert("You lost!")
+            this.start();
+          }
+        }
       }
+
       this.move();
     }, this.speed);
   }
 
+  reverse() {
+    this.snakePosition.reverse();
+    this.resetOnOffController();
+    this.paintSnakeFromPosition();
+    this.paintSnakeFood();
+    this.moveDirectionOld = this.moveDirection;
+  }
+
   moveForward() {
+
+    if (this.moveDirectionOld === Direction.Backward) {
+      this.reverse();
+      return;
+    }
+
     const nextPosition: Array<{ i: number; j: number }> = [];
 
     const head = this.snakePosition.slice(-1).pop();
@@ -168,6 +218,12 @@ export class SceneComponent implements OnInit {
   }
 
   moveBackward() {
+
+    if (this.moveDirectionOld === Direction.Forward) {
+      this.reverse();
+      return;
+    }
+
     const nextPosition: Array<{ i: number; j: number }> = [];
 
     const head = this.snakePosition.slice(-1).pop();
@@ -204,7 +260,15 @@ export class SceneComponent implements OnInit {
     this.paintSnakeFood();
   }
 
+
+
   moveDown() {
+
+    if (this.moveDirectionOld === Direction.Up) {
+      this.reverse();
+      return;
+    }
+
     const nextPosition: Array<{ i: number; j: number }> = [];
 
     const head = this.snakePosition.slice(-1).pop();
@@ -227,7 +291,7 @@ export class SceneComponent implements OnInit {
 
     if (this.snakeFood.length > 0 && newI == this.snakeFood[0].i && newJ == this.snakeFood[0].j) {
       nextPosition.push({
-        i: SceneSettings.lines - 1 ? 0 : this.snakeFood[0].i + 1,
+        i: this.snakeFood[0].i == SceneSettings.lines - 1 ? 0 : this.snakeFood[0].i + 1,
         j: this.snakeFood[0].j
       });
       this.addNewFood();
@@ -241,6 +305,12 @@ export class SceneComponent implements OnInit {
   }
 
   moveUp() {
+
+    if (this.moveDirectionOld === Direction.Down) {
+      this.reverse();
+      return;
+    }
+
     const nextPosition: Array<{ i: number; j: number }> = [];
 
     const head = this.snakePosition.slice(-1).pop();

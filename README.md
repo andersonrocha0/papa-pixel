@@ -1,6 +1,11 @@
 # PapaPixel
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.3.
+Projeto de estudo em Angular: uma grade de pixels que ligam e desligam
+para simular (e jogar) o clássico da minhoca (Snake).
+
+Governança e princípios: [`.specify/memory/constitution.md`](.specify/memory/constitution.md).
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.3 (runtime deps currently on Angular 13).
 
 ## Development server
 

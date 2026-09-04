@@ -25,7 +25,21 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Os testes end-to-end são executados via [Playwright](https://playwright.dev/) para validar a carga da grade de pixels, controles (pausa/direção) e regras do jogo (comida e colisão).
+
+### Instalação do navegador (primeira execução)
+
+```bash
+npx playwright install chromium
+```
+
+### Executar a suíte E2E
+
+```bash
+npm run test:e2e
+```
+
+O Playwright gerencia o servidor de desenvolvimento automaticamente (`http://localhost:4200`), ou reutiliza um `ng serve` já em execução caso esteja rodando localmente.
 
 ## Further help
 

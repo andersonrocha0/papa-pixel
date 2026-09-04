@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { PixelComponent } from '../pixel/pixel.component';
 import { SceneComponent } from './scene.component';
 
 describe('SceneComponent', () => {
@@ -8,7 +8,7 @@ describe('SceneComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SceneComponent ]
+      declarations: [ SceneComponent, PixelComponent ]
     })
     .compileComponents();
   });

@@ -40,6 +40,9 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/test-results/
+/playwright-report/
+/blob-report/
 
 # System Files
 .DS_Store

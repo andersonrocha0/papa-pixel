@@ -1,12 +1,17 @@
-<div>
+<div data-testid="game-grid">
   <div class="line" *ngFor="let line of lines; let i = index">
     <div class="column" *ngFor="let colum of columns; let j = index">
-      <app-pixel [on]="onOffController[i][j]"></app-pixel>
+      <app-pixel
+        [on]="onOffController[i] ? onOffController[i][j] : false"
+        [row]="i"
+        [col]="j"
+        [role]="roleController[i] ? roleController[i][j] : 'empty'"
+      ></app-pixel>
     </div>
   </div>
 </div>
-<div><button (click)="pause()">{{isPaused ? "Start" : "Pause"}}</button></div>
-<div><button (click)="changeUp()">Move Up</button></div>
-<div><button (click)="changeDown()">Move Down</button></div>
-<div><button (click)="changeForward()">Move Forward</button></div>
-<div><button (click)="changeBackward()">Move Backward</button></div>
+<div><button data-testid="btn-pause" (click)="togglePause()">{{isPaused ? "Start" : "Pause"}}</button></div>
+<div><button data-testid="btn-move-up" (click)="changeUp()">Move Up</button></div>
+<div><button data-testid="btn-move-down" (click)="changeDown()">Move Down</button></div>
+<div><button data-testid="btn-move-forward" (click)="changeForward()">Move Forward</button></div>
+<div><button data-testid="btn-move-backward" (click)="changeBackward()">Move Backward</button></div>

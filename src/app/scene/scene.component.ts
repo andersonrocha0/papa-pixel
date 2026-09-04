@@ -11,6 +11,7 @@ export class SceneComponent implements OnInit {
   columns: Array<any> = Array(SceneSettings.columns).fill(null);
 
   onOffController: Array<Array<boolean>> = [];
+  roleController: Array<Array<'empty' | 'snake' | 'food'>> = [];
   onOffControllerSnapshots: Array<Array<Array<boolean>>> = [];
   isPaused = false;
   snakePosition = [
@@ -46,10 +47,13 @@ export class SceneComponent implements OnInit {
 
   resetOnOffController() {
     this.onOffController = [];
+    this.roleController = [];
     for (let i = 0; i < this.lines.length; i++) {
       this.onOffController.push([]);
+      this.roleController.push([]);
       for (let _ of this.columns) {
         this.onOffController[i].push(false);
+        this.roleController[i].push('empty');
       }
     }
   }
@@ -57,6 +61,7 @@ export class SceneComponent implements OnInit {
   paintSnakeFromPosition() {
     for (let position of this.snakePosition) {
       this.onOffController[position.i][position.j] = true;
+      this.roleController[position.i][position.j] = 'snake';
     }
   }
 
@@ -64,10 +69,9 @@ export class SceneComponent implements OnInit {
     for (const food of this.snakeFood) {
       if (this.snakeFood.length > 0) {
         this.onOffController[food.i][food.j] = true;
+        this.roleController[food.i][food.j] = 'food';
       }
     }
-
-
   }
 
   addNewFood() {
@@ -85,6 +89,14 @@ export class SceneComponent implements OnInit {
 
   unpause() {
     this.isPaused = false;
+  }
+
+  togglePause() {
+    if (this.isPaused) {
+      this.unpause();
+    } else {
+      this.pause();
+    }
   }
 
   @HostListener('window:keydown', ['$event'])

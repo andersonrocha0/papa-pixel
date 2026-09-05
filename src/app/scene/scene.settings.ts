@@ -3,7 +3,7 @@ export class SceneSettings {
   public static columns = 50;
   public static initialSpeed = 200;
   public static speedStep = 10;
-  public static minSpeed = 100;
+  public static minSpeed = 50;
   public static initialLength = 4;
 
   public static speedForLength(length: number): number {

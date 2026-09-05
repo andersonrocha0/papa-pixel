@@ -92,24 +92,24 @@ describe('SceneComponent', () => {
     expect(hud?.textContent).toContain('Speed: 1');
   });
 
-  it('should keep speed at 100ms and level 11 after extra growth past the cap', () => {
+  it('should keep speed at 50ms and level 16 after extra growth past the cap', () => {
     component.pause();
-    component.snakePosition = Array.from({ length: 14 }, (_, index) => ({
+    component.snakePosition = Array.from({ length: 19 }, (_, index) => ({
       i: 0,
       j: index,
     }));
     component.applySpeedFromLength();
 
-    expect(component.speed).toBe(100);
-    expect(component.speedLevel).toBe(11);
+    expect(component.speed).toBe(50);
+    expect(component.speedLevel).toBe(16);
 
     component.snakePosition = [
       ...component.snakePosition,
-      { i: 0, j: 14 },
+      { i: 0, j: 19 },
     ];
     component.applySpeedFromLength();
 
-    expect(component.speed).toBe(100);
-    expect(component.speedLevel).toBe(11);
+    expect(component.speed).toBe(50);
+    expect(component.speedLevel).toBe(16);
   });
 });

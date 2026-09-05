@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -18,7 +18,9 @@ import { PixelComponent } from './pixel/pixel.component';
     AppRoutingModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true })
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

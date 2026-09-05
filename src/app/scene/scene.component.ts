@@ -1,12 +1,15 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { SceneSettings } from './scene.settings';
 
 @Component({
   selector: 'app-scene',
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.css'],
+  standalone: false
 })
 export class SceneComponent implements OnInit {
+  constructor(private cdr: ChangeDetectorRef) {}
+
   lines: Array<any> = Array(SceneSettings.lines).fill(null);
   columns: Array<any> = Array(SceneSettings.columns).fill(null);
 
@@ -173,6 +176,7 @@ export class SceneComponent implements OnInit {
             this.start();
           }
         }
+        this.cdr.markForCheck();
       }
 
       this.move();

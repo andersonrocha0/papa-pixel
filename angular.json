@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "papa-pixel:build:production"
+              "buildTarget": "papa-pixel:build:production"
             },
             "development": {
-              "browserTarget": "papa-pixel:build:development"
+              "buildTarget": "papa-pixel:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "papa-pixel:build"
+            "buildTarget": "papa-pixel:build"
           }
         },
         "test": {
@@ -104,6 +104,5 @@
         }
       }
     }
-  },
-  "defaultProject": "papa-pixel"
+  }
 }

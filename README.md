@@ -5,7 +5,7 @@ para simular (e jogar) o clássico da minhoca (Snake).
 
 Governança e princípios: [`.specify/memory/constitution.md`](.specify/memory/constitution.md).
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.3 (runtime deps currently on Angular 13).
+This project runs on [Angular CLI](https://github.com/angular/angular-cli) version 22 (Angular 22 LTS, TypeScript 6, Node.js 24+).
 
 ## Development server
 

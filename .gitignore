@@ -44,6 +44,10 @@ testem.log
 /playwright-report/
 /blob-report/
 
+# secrets and logs
+.env*
+*.log
+
 # System Files
 .DS_Store
 Thumbs.db

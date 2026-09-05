@@ -10,6 +10,14 @@
     </div>
   </div>
 </div>
+<div
+  class="speed-indicator"
+  data-testid="speed-indicator"
+  [attr.data-speed]="speedLevel"
+  [attr.data-interval-ms]="speed"
+>
+  Speed: {{ speedLevel }}
+</div>
 <div><button data-testid="btn-pause" (click)="togglePause()">{{isPaused ? "Start" : "Pause"}}</button></div>
 <div><button data-testid="btn-move-up" (click)="changeUp()">Move Up</button></div>
 <div><button data-testid="btn-move-down" (click)="changeDown()">Move Down</button></div>

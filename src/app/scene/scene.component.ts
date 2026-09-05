@@ -31,7 +31,13 @@ export class SceneComponent implements OnInit {
   moveDirection = Direction.Forward;
   speed = SceneSettings.initialSpeed;
 
+  get speedLevel(): number {
+    return SceneSettings.speedLevelForLength(this.snakePosition.length);
+  }
 
+  applySpeedFromLength() {
+    this.speed = SceneSettings.speedForLength(this.snakePosition.length);
+  }
 
   start() {
     this.snakePosition = this.originalSnakePosition.map(pos => ({ ...pos }));
@@ -41,6 +47,7 @@ export class SceneComponent implements OnInit {
     this.paintSnakeFromPosition();
     this.addNewFood();
     this.paintSnakeFood();
+    this.applySpeedFromLength();
     this.unpause();
   }
 
@@ -159,6 +166,7 @@ export class SceneComponent implements OnInit {
         } else if (this.moveDirection === Direction.Up) {
           this.moveUp();
         }
+        this.applySpeedFromLength();
         this.moveDirectionOld = this.moveDirection;
         const snakePositionMap = new Map();
         this.snakePosition.forEach((item) => {

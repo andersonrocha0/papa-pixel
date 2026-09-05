@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PixelComponent } from '../pixel/pixel.component';
 import { Direction, SceneComponent } from './scene.component';
+import { SceneSettings } from './scene.settings';
 
 describe('SceneComponent', () => {
   let component: SceneComponent;
@@ -62,5 +63,53 @@ describe('SceneComponent', () => {
     expect(component.moveDirectionOld).toBe(Direction.Forward);
     expect(component.snakePosition.length).toBe(4);
     expect(component.snakePosition[component.snakePosition.length - 1]).toEqual({ i: 0, j: 3 });
+  });
+
+  it('should reduce speed to 190 after one simulated growth', () => {
+    component.snakeFood = [{ i: 0, j: 4 }];
+    const lengthBefore = component.snakePosition.length;
+
+    component.moveForward();
+    expect(component.snakePosition.length).toBe(lengthBefore + 1);
+
+    component.applySpeedFromLength();
+    expect(component.speed).toBe(190);
+  });
+
+  it('should restore initial speed when start() is called after a faster pace', () => {
+    component.speed = 150;
+    component.start();
+    expect(component.speed).toBe(SceneSettings.initialSpeed);
+  });
+
+  it('should render the speed indicator at level 1 and 200ms on start', () => {
+    const hud: HTMLElement | null = fixture.nativeElement.querySelector(
+      '[data-testid="speed-indicator"]'
+    );
+    expect(hud).toBeTruthy();
+    expect(hud?.getAttribute('data-speed')).toBe('1');
+    expect(hud?.getAttribute('data-interval-ms')).toBe('200');
+    expect(hud?.textContent).toContain('Speed: 1');
+  });
+
+  it('should keep speed at 100ms and level 11 after extra growth past the cap', () => {
+    component.pause();
+    component.snakePosition = Array.from({ length: 14 }, (_, index) => ({
+      i: 0,
+      j: index,
+    }));
+    component.applySpeedFromLength();
+
+    expect(component.speed).toBe(100);
+    expect(component.speedLevel).toBe(11);
+
+    component.snakePosition = [
+      ...component.snakePosition,
+      { i: 0, j: 14 },
+    ];
+    component.applySpeedFromLength();
+
+    expect(component.speed).toBe(100);
+    expect(component.speedLevel).toBe(11);
   });
 });

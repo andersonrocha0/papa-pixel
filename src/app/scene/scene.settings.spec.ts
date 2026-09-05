@@ -1,5 +1,29 @@
 import { SceneSettings } from './scene.settings';
 
+describe('SceneSettings lane helpers', () => {
+  it('maps head + row axis to the head row index', () => {
+    expect(SceneSettings.laneFor({ i: 0, j: 3 }, 'row')).toEqual({
+      axis: 'row',
+      index: 0,
+    });
+  });
+
+  it('maps head + col axis to the head column index', () => {
+    expect(SceneSettings.laneFor({ i: 2, j: 7 }, 'col')).toEqual({
+      axis: 'col',
+      index: 7,
+    });
+  });
+
+  it('reports only cells on the active lane', () => {
+    const lane = { axis: 'row' as const, index: 0 };
+    expect(SceneSettings.cellIsOnLane(0, 10, lane)).toBe(true);
+    expect(SceneSettings.cellIsOnLane(1, 10, lane)).toBe(false);
+    expect(SceneSettings.cellIsOnLane(2, 7, { axis: 'col', index: 7 })).toBe(true);
+    expect(SceneSettings.cellIsOnLane(2, 6, { axis: 'col', index: 7 })).toBe(false);
+  });
+});
+
 describe('SceneSettings speed formula', () => {
   it('maps length to interval and level: 4→200/1, 5→190/2, 9→150/6, 14→100/11, 19→50/16, 25→50/16', () => {
     expect(SceneSettings.speedForLength(4)).toBe(200);

@@ -1,3 +1,10 @@
+export type LaneAxis = 'row' | 'col';
+
+export interface ActiveLane {
+  axis: LaneAxis;
+  index: number;
+}
+
 export class SceneSettings {
   public static lines = 20;
   public static columns = 50;
@@ -20,5 +27,23 @@ export class SceneSettings {
       (SceneSettings.initialSpeed - SceneSettings.minSpeed) / SceneSettings.speedStep
     );
     return 1 + Math.min(grown, maxGrown);
+  }
+
+  public static laneFor(
+    head: { i: number; j: number },
+    axis: LaneAxis
+  ): ActiveLane {
+    return {
+      axis,
+      index: axis === 'row' ? head.i : head.j,
+    };
+  }
+
+  public static cellIsOnLane(
+    row: number,
+    col: number,
+    lane: ActiveLane
+  ): boolean {
+    return lane.axis === 'row' ? row === lane.index : col === lane.index;
   }
 }

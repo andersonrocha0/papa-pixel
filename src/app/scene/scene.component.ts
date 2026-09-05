@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
-import { SceneSettings } from './scene.settings';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { ActiveLane, LaneAxis, SceneSettings } from './scene.settings';
 
 @Component({
   selector: 'app-scene',
@@ -9,6 +9,9 @@ import { SceneSettings } from './scene.settings';
 })
 export class SceneComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef) {}
+
+  @ViewChild('gameGrid', { static: true })
+  gameGrid?: ElementRef<HTMLDivElement>;
 
   lines: Array<any> = Array(SceneSettings.lines).fill(null);
   columns: Array<any> = Array(SceneSettings.columns).fill(null);
@@ -27,12 +30,51 @@ export class SceneComponent implements OnInit {
 
   snakeFood: Array<{i: number, j: number}> = [];
 
-  moveDirectionOld = Direction.Forward;
+  private appliedDirection = Direction.Forward;
   moveDirection = Direction.Forward;
   speed = SceneSettings.initialSpeed;
+  laneAxis: LaneAxis = 'row';
+  laneIndex = 0;
+
+  get moveDirectionOld(): Direction {
+    return this.appliedDirection;
+  }
+
+  set moveDirectionOld(value: Direction) {
+    this.appliedDirection = value;
+    this.syncLaneView();
+  }
 
   get speedLevel(): number {
     return SceneSettings.speedLevelForLength(this.snakePosition.length);
+  }
+
+  get activeLane(): ActiveLane {
+    const head = this.snakePosition[this.snakePosition.length - 1];
+    const axis: LaneAxis =
+      this.moveDirectionOld === Direction.Up ||
+      this.moveDirectionOld === Direction.Down
+        ? 'col'
+        : 'row';
+    return SceneSettings.laneFor(head, axis);
+  }
+
+  isOnActiveLane(row: number, col: number): boolean {
+    return SceneSettings.cellIsOnLane(row, col, this.activeLane);
+  }
+
+  syncLaneView() {
+    const lane = this.activeLane;
+    this.laneAxis = lane.axis;
+    this.laneIndex = lane.index;
+    // Write attributes directly: [attr.data-*] was keeping the first-paint
+    // values on later detectChanges in unit tests (Angular 22).
+    const el = this.gameGrid?.nativeElement;
+    if (el) {
+      el.setAttribute('data-lane-axis', lane.axis);
+      el.setAttribute('data-lane-index', String(lane.index));
+    }
+    this.cdr.markForCheck();
   }
 
   applySpeedFromLength() {
@@ -48,6 +90,7 @@ export class SceneComponent implements OnInit {
     this.addNewFood();
     this.paintSnakeFood();
     this.applySpeedFromLength();
+    this.syncLaneView();
     this.unpause();
   }
 
@@ -240,6 +283,7 @@ export class SceneComponent implements OnInit {
     this.resetOnOffController();
     this.paintSnakeFromPosition();
     this.paintSnakeFood();
+    this.syncLaneView();
   }
 
   moveBackward() {
@@ -283,6 +327,7 @@ export class SceneComponent implements OnInit {
     this.resetOnOffController();
     this.paintSnakeFromPosition();
     this.paintSnakeFood();
+    this.syncLaneView();
   }
 
 
@@ -327,6 +372,7 @@ export class SceneComponent implements OnInit {
     this.resetOnOffController();
     this.paintSnakeFromPosition();
     this.paintSnakeFood();
+    this.syncLaneView();
   }
 
   moveUp() {
@@ -369,6 +415,7 @@ export class SceneComponent implements OnInit {
     this.resetOnOffController();
     this.paintSnakeFromPosition();
     this.paintSnakeFood();
+    this.syncLaneView();
   }
 }
 

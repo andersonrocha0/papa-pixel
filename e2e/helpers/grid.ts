@@ -16,6 +16,18 @@ export function getGridLocator(page: Page): Locator {
   return page.locator('[data-testid="game-grid"]');
 }
 
+export function getLanePixelLocators(page: Page): Locator {
+  return page.locator('app-pixel[data-lane="true"]');
+}
+
+export async function getLaneAxis(page: Page): Promise<string | null> {
+  return getGridLocator(page).getAttribute('data-lane-axis');
+}
+
+export async function getLaneIndex(page: Page): Promise<string | null> {
+  return getGridLocator(page).getAttribute('data-lane-index');
+}
+
 export function getAllPixelLocators(page: Page): Locator {
   return page.locator('app-pixel');
 }

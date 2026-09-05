@@ -14,3 +14,7 @@
 .off {
   background-color: white;
 }
+
+:host([data-lane="true"]) .off {
+  background-color: #e8edf4;
+}

@@ -1,4 +1,4 @@
-<div data-testid="game-grid">
+<div #gameGrid data-testid="game-grid">
   <div class="line" *ngFor="let line of lines; let i = index">
     <div class="column" *ngFor="let colum of columns; let j = index">
       <app-pixel
@@ -6,6 +6,7 @@
         [row]="i"
         [col]="j"
         [role]="roleController[i] ? roleController[i][j] : 'empty'"
+        [lane]="isOnActiveLane(i, j)"
       ></app-pixel>
     </div>
   </div>

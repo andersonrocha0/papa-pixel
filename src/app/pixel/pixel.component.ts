@@ -11,6 +11,7 @@ export class PixelComponent {
   @Input() row = 0;
   @Input() col = 0;
   @Input() role: 'empty' | 'snake' | 'food' = 'empty';
+  @Input() lane = false;
 
   @HostBinding('attr.data-row') get hostRow() {
     return this.row;
@@ -26,5 +27,9 @@ export class PixelComponent {
 
   @HostBinding('attr.data-role') get hostRole() {
     return this.role;
+  }
+
+  @HostBinding('attr.data-lane') get hostLane() {
+    return this.lane ? 'true' : 'false';
   }
 }

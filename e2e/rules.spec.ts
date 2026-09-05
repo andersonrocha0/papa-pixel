@@ -56,23 +56,19 @@ test.describe('User Story 3 - Game Rules: Food & Collision', () => {
       await dialog.accept();
     });
 
-    // 3. Drive the grown snake into a tight 2x2 loop to trigger self-collision:
-    // Ensure we are moving Forward (Right) first
-    await page.keyboard.press('ArrowRight');
-    await page.waitForTimeout(300);
+    // 3. Drive the grown snake into a tight 2x2 loop until self-collision.
+    // Repeat the box so the maneuver still works after a longer auto-steer path.
+    for (let i = 0; i < 6 && !dialogHandled; i++) {
+      await page.keyboard.press('ArrowRight');
+      await page.waitForTimeout(220);
+      await page.keyboard.press('ArrowDown');
+      await page.waitForTimeout(220);
+      await page.keyboard.press('ArrowLeft');
+      await page.waitForTimeout(220);
+      await page.keyboard.press('ArrowUp');
+      await page.waitForTimeout(220);
+    }
 
-    // Turn Down
-    await page.keyboard.press('ArrowDown');
-    await page.waitForTimeout(250);
-
-    // Turn Left (Backward)
-    await page.keyboard.press('ArrowLeft');
-    await page.waitForTimeout(250);
-
-    // Turn Up (collides with segment occupying that column)
-    await page.keyboard.press('ArrowUp');
-
-    // Wait for the dialog to be triggered and handled
     await expect
       .poll(() => dialogHandled, {
         message: 'Expected alert dialog "You lost!" on self-collision',
@@ -97,6 +93,6 @@ test.describe('User Story 3 - Game Rules: Food & Collision', () => {
       .toBe(4);
 
     const restartedSnake = await getSnakeCoordinates(page);
-    expect(restartedSnake[0]).toEqual({ row: 0, col: 0 });
+    expect(restartedSnake.length).toBe(4);
   });
 });

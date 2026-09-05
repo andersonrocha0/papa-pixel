@@ -23,7 +23,7 @@ export class SceneComponent implements OnInit {
     { i: 0, j: 2 },
     { i: 0, j: 3 },
   ];
-  originalSnakePosition = [...this.snakePosition];
+  originalSnakePosition = this.snakePosition.map(pos => ({ ...pos }));
 
   snakeFood: Array<{i: number, j: number}> = [];
 
@@ -34,8 +34,9 @@ export class SceneComponent implements OnInit {
 
 
   start() {
-    this.snakePosition = this.originalSnakePosition;
+    this.snakePosition = this.originalSnakePosition.map(pos => ({ ...pos }));
     this.moveDirection = Direction.Forward;
+    this.moveDirectionOld = Direction.Forward;
     this.resetOnOffController();
     this.paintSnakeFromPosition();
     this.addNewFood();
@@ -143,7 +144,6 @@ export class SceneComponent implements OnInit {
   }
 
   changeDirection(direction: Direction) {
-    this.moveDirectionOld = this.moveDirection;
     this.moveDirection = direction;
   }
 
@@ -159,6 +159,7 @@ export class SceneComponent implements OnInit {
         } else if (this.moveDirection === Direction.Up) {
           this.moveUp();
         }
+        this.moveDirectionOld = this.moveDirection;
         const snakePositionMap = new Map();
         this.snakePosition.forEach((item) => {
           const key = item.i + "" + item.j;
@@ -363,7 +364,7 @@ export class SceneComponent implements OnInit {
   }
 }
 
-enum Direction {
+export enum Direction {
   Up,
   Down,
   Forward,
